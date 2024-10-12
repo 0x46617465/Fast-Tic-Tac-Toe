@@ -5,11 +5,13 @@ constexpr bool MagicArray[] = { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 
 
 char board[] =
 {
+    '\n',
     '1', ' ', '|', ' ', '2', ' ', '|', ' ', '3', '\n',
     '-', '-', '-', '-', '-', '-', '-', '-', '-', '\n',
     '4', ' ', '|', ' ', '5', ' ', '|', ' ', '6', '\n',
     '-', '-', '-', '-', '-', '-', '-', '-', '-', '\n',
-    '7', ' ', '|', ' ', '8', ' ', '|', ' ', '9', '\n'
+    '7', ' ', '|', ' ', '8', ' ', '|', ' ', '9', '\n',
+    '\n'
 };
 
 bool checkWin(int playerBitboard);
@@ -74,7 +76,7 @@ bool makeMove(int& playerBitboard, int& fullBitboard, char playerChar, int posit
     playerBitboard |= bitmask;
     fullBitboard |= bitmask;
     
-    int boardIndex = (position << 2) + ((position / 3) << 3);
+    int boardIndex = ((position << 2) + 1) + ((position / 3) << 3);
     board[boardIndex] = playerChar;
 
     return true;
@@ -82,7 +84,7 @@ bool makeMove(int& playerBitboard, int& fullBitboard, char playerChar, int posit
 
 void displayBoard()
 {
-    std::cout << '\n' << board << '\n';
+    std::cout << board;
 }
 
 void printResults(bool gameWon, char currentPlayerCharacter)
