@@ -87,9 +87,10 @@ void displayBoard()
 
 void printResults(bool gameWon, char currentPlayerCharacter)
 {
+    displayBoard();
+
     if (gameWon)
     {
-        displayBoard();
         std::cout << "Player " << currentPlayerCharacter << " wins!\n";
     }
     else
