@@ -15,18 +15,14 @@ char board[] =
 };
 
 bool checkWin(int playerBitboard);
-bool makeMove(int& playerBitboard, int& fullBitboard, char playerChar, int position);
+bool makeMove(int& playerBitboard, int fullBitboard, char playerChar, int position);
 void displayBoard();
 void printResults(bool gameWon, char currentPlayerCharacter);
 
 int main()
 {
-    constexpr char playerCharacters[]{ 'X', 'O' };
-
-    int playerBitboards[]{ 0, 0 };
-    int fullBitboard{ 0 };
-    int currentPlayerIndex{ 0 };  // 0 = X, 1 = O
-    char currentPlayerCharacter{};
+    int currentBitboard{ 0 }, otherBitboard{ 0 };
+    char currentPlayerCharacter{ 'X' }, otherPlayerCharacter{ 'O' };
 
     bool gameWon{ false };
     int movesLeft{ 9 };
@@ -34,24 +30,25 @@ int main()
     while (movesLeft)
     {
         displayBoard();
-        currentPlayerCharacter = playerCharacters[currentPlayerIndex];
 
         std::cout << "Player " << currentPlayerCharacter << ", enter your move (1-9): ";
         int move{};
         std::cin >> move;
 
-        if (!makeMove(playerBitboards[currentPlayerIndex], fullBitboard, currentPlayerCharacter, move)) [[unlikely]]
+        if (!makeMove(currentBitboard, currentBitboard | otherBitboard, currentPlayerCharacter, move)) [[unlikely]]
         {
             std::cout << "Invalid move! Try again.\n";
             continue;
         }
-        if (checkWin(playerBitboards[currentPlayerIndex])) [[unlikely]]
+        if (checkWin(currentBitboard)) [[unlikely]]
         {
             gameWon = true;
             break;
         }
 
-        currentPlayerIndex ^= 1;  // Switch player: 0->1 and vice versa
+        // Switch player
+        std::swap(currentBitboard, otherBitboard);
+        std::swap(currentPlayerCharacter, otherPlayerCharacter);
         --movesLeft;
     }
 
@@ -64,7 +61,7 @@ bool checkWin(int playerBitboard)
     return MagicArray[playerBitboard];
 }
 
-bool makeMove(int& playerBitboard, int& fullBitboard, char playerChar, int position)
+bool makeMove(int& playerBitboard, int fullBitboard, char playerChar, int position)
 {
     --position;
 
@@ -74,7 +71,6 @@ bool makeMove(int& playerBitboard, int& fullBitboard, char playerChar, int posit
 
 
     playerBitboard |= bitmask;
-    fullBitboard |= bitmask;
     
     int boardIndex = ((position << 2) + 1) + ((position / 3) << 3);
     board[boardIndex] = playerChar;
