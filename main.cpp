@@ -66,9 +66,8 @@ bool makeMove(int& playerBitboard, int fullBitboard, char playerChar, int positi
     --position;
 
     int bitmask = (1 << position);
-    if (position < 0 || position > 8 || (fullBitboard & bitmask))
+    if (position < 0 || position > 8 || (fullBitboard & bitmask)) [[unlikely]]
         return false;
-
 
     playerBitboard |= bitmask;
     
