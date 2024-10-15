@@ -71,8 +71,8 @@ bool makeMove(int& playerBitboard, int fullBitboard, char playerChar, int positi
 
     playerBitboard |= bitmask;
     
-    int boardIndex = ((position << 2) + 1) + ((position / 3) << 3);
-    board[boardIndex] = playerChar;
+    constexpr static int boardIndeces[]{ 1, 5, 9, 21, 25, 29, 41, 45, 49 };
+    board[boardIndeces[position]] = playerChar;
 
     return true;
 }
